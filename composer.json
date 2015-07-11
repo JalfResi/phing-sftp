@@ -1,0 +1,23 @@
+{
+    "name": "joomboss/phing-sftp",
+    "type": "library",
+    "description": "Phing SFTP plugin",
+    "keywords": ["Phing", "PHP", "CI", "SFTP", "SSH"],
+    "homepage": "https://github.com/akanstantsinau/phing-sftp",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "akanstantsinau",
+            "email": "joomboss@gmail.com",
+            "homepage": "http://joomboss.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"joomboss\\": "src/joomboss"}
+    },
+    "require":{
+        "phpseclib/phpseclib" : "~0.3.10",
+        "phing/phing":"*"
+    }
+}
