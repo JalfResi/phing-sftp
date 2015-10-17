@@ -2,6 +2,7 @@
 namespace joomboss\phing\task;
 use \phpseclib\Net\SFTP;
 use \Task;
+use \BuildException;
 
 /**
  * Copy files to and from a remote host using sftp. Based on phing scp task.
@@ -195,7 +196,7 @@ class SftpTask extends Task
 		if ($this->host == "" || $this->username == "")
 			throw new BuildException("Attribute 'hostname' and 'username' must be set");
 
-		$this->connection = @new Net_SFTP($this->host, $this->port);
+		$this->connection = @new \Net_SFTP($this->host, $this->port);
 		if (is_null($this->connection))
 			throw new BuildException("Could not establish connection to {$this->host}:{$this->port}!");
 
