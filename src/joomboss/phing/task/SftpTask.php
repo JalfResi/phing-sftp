@@ -1,6 +1,7 @@
 <?php
 namespace joomboss\phing\task;
 use \phpseclib\Net\SFTP;
+use \phpseclib\Crypt\RSA;
 use \Task;
 use \FileSet;
 use \BuildException;
@@ -25,6 +26,7 @@ class SftpTask extends Task
 	protected $port = 22;
 	protected $username = "";
 	protected $password = "";
+	protected $keyfile = "";
 	protected $autocreate = true;
 	protected $fetch = false;
 
@@ -96,21 +98,37 @@ class SftpTask extends Task
 		return $this->username;
 	}
 
-	/**
-	 * Sets the password of the user to sftp
-	 */
-	public function setPassword($password)
-	{
-		$this->password = $password;
-	}
+    /**
+     * Sets the password of the user to sftp
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
 
-	/**
-	 * Returns the password
-	 */
-	public function getPassword()
-	{
-		return $this->password;
-	}
+    /**
+     * Returns the password
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Sets the keyfile of the user to sftp
+     */
+    public function setKeyfile($keyfile)
+    {
+        $this->keyfile = $keyfile;
+    }
+
+    /**
+     * Returns the keyfile
+     */
+    public function getKeyfile()
+    {
+        return $this->keyfile;
+    }
 
 	/**
 	 * Sets whether to autocreate remote directories
@@ -201,7 +219,22 @@ class SftpTask extends Task
 		if (is_null($this->connection))
 			throw new BuildException("Could not establish connection to {$this->host}:{$this->port}!");
 
-		$ret = $this->connection->login($this->username, $this->password);
+		$ret = null;
+		if ($this->keyfile != "") {
+            // create new RSA key
+            $key = new \Crypt_RSA();
+
+            // in case that key has a password
+            $key->setPassword($this->password);
+
+            // load the private key
+            $key->loadKey(file_get_contents($this->keyfile));
+
+            $ret = $this->connection->login($this->username, $key);
+        } else {
+            $ret = $this->connection->login($this->username, $this->password);
+        }
+
 		if (!$ret)
 			throw new BuildException("Could not login to {$this->username}@{$this->host}");
 
