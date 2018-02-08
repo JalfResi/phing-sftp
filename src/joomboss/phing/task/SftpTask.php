@@ -2,6 +2,7 @@
 namespace joomboss\phing\task;
 use \phpseclib\Net\SFTP;
 use \Task;
+use \FileSet;
 use \BuildException;
 
 /**
