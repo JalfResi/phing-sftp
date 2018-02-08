@@ -300,8 +300,11 @@ class SftpTask extends Task
 			if (!is_null($this->mode))
 				$this->connection->chmod($this->mode, $remoteEndpoint);
 
-			if (!$ret)
-				throw new BuildException("Could not create remote file '{$remoteEndpoint}'");
+			if (!$ret) {
+                $errors = $this->connection->getSFTPErrors();
+                $errStr = join("\n", $errors);
+				throw new BuildException("Could not create remote file '{$remoteEndpoint}' {$errStr}");
+            }
 		}
 
 		$this->counter++;
