@@ -228,7 +228,7 @@ class SftpTask extends Task
             $key->setPassword($this->password);
 
             // load the private key
-            $key->loadKey(file_get_contents($this->keyfile));
+            $key->loadKey(file_get_contents(realpath($this->keyfile)));
 
             $ret = $this->connection->login($this->username, $key);
         } else {
