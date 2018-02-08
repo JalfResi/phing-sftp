@@ -274,8 +274,11 @@ class SftpTask extends Task
 
 			$ret = $this->connection->get($remoteEndpoint, $localEndpoint);
 
-			if ($ret === false)
-				throw new BuildException("Could not fetch remote file '{$remoteEndpoint}'");
+			if ($ret === false) {
+                $errors = $this->connection->getSFTPErrors();
+                $errStr = join("\n", $errors);
+                throw new BuildException("Could not fetch remote file '{$remoteEndpoint}' {$errStr}");
+            }
 		}
 		else
 		{
